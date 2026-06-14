@@ -51,42 +51,20 @@ MauriceCLI is a powerful command-line tool for interacting with AgentMaurice fro
 
 ## Installation
 
-### Download Pre-built Binaries
+### Secure Installer
 
-Download the latest release for your platform from [GitHub Releases](https://github.com/agentmaurice/mauricecli/releases):
+Installers read the AgentMaurice update manifest, verify SHA256 and Minisign
+signatures, then install the canonical `maurice` binary.
 
-**Linux (amd64)**
+**Linux / macOS**
 ```bash
-wget https://github.com/agentmaurice/mauricecli/releases/latest/download/mauricecli_linux_amd64.tar.gz
-tar -xzf mauricecli_linux_amd64.tar.gz
-sudo mv mauricecli /usr/local/bin/maurice
+curl -fsSL https://raw.githubusercontent.com/agentmaurice/mauricecli/main/scripts/install_mauricecli.sh | bash
 ```
 
-**Linux (arm64)**
-```bash
-wget https://github.com/agentmaurice/mauricecli/releases/latest/download/mauricecli_linux_arm64.tar.gz
-tar -xzf mauricecli_linux_arm64.tar.gz
-sudo mv mauricecli /usr/local/bin/maurice
-```
-
-**macOS (Intel)**
-```bash
-wget https://github.com/agentmaurice/mauricecli/releases/latest/download/mauricecli_darwin_amd64.tar.gz
-tar -xzf mauricecli_darwin_amd64.tar.gz
-sudo mv mauricecli /usr/local/bin/maurice
-```
-
-**macOS (Apple Silicon)**
-```bash
-wget https://github.com/agentmaurice/mauricecli/releases/latest/download/mauricecli_darwin_arm64.tar.gz
-tar -xzf mauricecli_darwin_arm64.tar.gz
-sudo mv mauricecli /usr/local/bin/maurice
-```
-
-**Windows (amd64)**
+**Windows**
 ```powershell
-# Download from: https://github.com/agentmaurice/mauricecli/releases/latest/download/mauricecli_windows_amd64.zip
-# Extract and add to PATH
+iwr https://raw.githubusercontent.com/agentmaurice/mauricecli/main/scripts/install_mauricecli.ps1 -OutFile install_mauricecli.ps1
+.\install_mauricecli.ps1
 ```
 
 ### Build from Source
@@ -94,7 +72,7 @@ sudo mv mauricecli /usr/local/bin/maurice
 ```bash
 git clone https://github.com/agentmaurice/chatserver.git
 cd chatserver
-go build -o mauricecli ./cmd/mauricecli
+go build -o maurice ./cmd/mauricecli
 ```
 
 ## Quick Start
@@ -821,15 +799,9 @@ maurice chat --watch --space monitoring
 ## Updating
 
 ```bash
-# Download latest version
-wget https://github.com/agentmaurice/mauricecli/releases/latest/download/mauricecli_linux_amd64.tar.gz
-
-# Replace binary
-tar -xzf mauricecli_linux_amd64.tar.gz
-sudo mv mauricecli /usr/local/bin/maurice
-
-# Verify version
-maurice --version
+# Check and install explicitly
+maurice update check
+maurice update install --yes
 ```
 
 ## Shell Completion

@@ -3,7 +3,7 @@ set -euo pipefail
 
 BIN_NAME="maurice"
 LEGACY_BIN_NAME="mauricecli"
-ENDPOINT="${MAURICECLI_UPDATE_ENDPOINT:-https://get.agentmaurice.ai/products/mauricecli/latest.json}"
+ENDPOINT="${MAURICECLI_UPDATE_ENDPOINT:-https://get.agentmaurice.app/products/mauricecli/latest.json}"
 CHANNEL="${MAURICECLI_UPDATE_CHANNEL:-stable}"
 PUBLIC_KEY="${MAURICECLI_MINISIGN_PUBLIC_KEY:-RWT2dtVKMzMezZOuTS4bQoM1kEix9oTYEq5j5mIOYJaskfsvHC+qNBVp}"
 INSTALL_DIR=""
@@ -14,7 +14,11 @@ usage() {
 Install or update ${BIN_NAME} from the AgentMaurice update gateway.
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/agentmaurice/mauricecli/main/scripts/install_mauricecli.sh | bash
+  curl -fsSL https://github.com/agentmaurice/mauricecli/releases/latest/download/install_mauricecli.sh | bash
+
+Prerequisites:
+  jq and minisign must be installed locally so the installer can verify the
+  signed release manifest and archive before installing the binary.
 
 Options:
   -v, --version <tag>   Require a specific latest manifest version. Default: latest
@@ -85,11 +89,16 @@ sha256_file() {
   fi
 }
 
+normalize_public_key() {
+  printf '%s\n' "$1" | awk 'NF && $0 !~ /comment:/ { print; exit }'
+}
+
 main() {
   parse_args "$@"
   need jq
   need minisign
 
+  PUBLIC_KEY="$(normalize_public_key "$PUBLIC_KEY")"
   if [ -z "$PUBLIC_KEY" ]; then
     echo "Error: MAURICECLI_MINISIGN_PUBLIC_KEY must be configured in this installer." >&2
     exit 1

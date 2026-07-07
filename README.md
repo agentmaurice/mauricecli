@@ -58,12 +58,12 @@ signatures, then install the canonical `maurice` binary.
 
 **Linux / macOS**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/agentmaurice/mauricecli/main/scripts/install_mauricecli.sh | bash
+curl -fsSL https://github.com/agentmaurice/mauricecli/releases/latest/download/install_mauricecli.sh | bash
 ```
 
 **Windows**
 ```powershell
-iwr https://raw.githubusercontent.com/agentmaurice/mauricecli/main/scripts/install_mauricecli.ps1 -OutFile install_mauricecli.ps1
+iwr https://github.com/agentmaurice/mauricecli/releases/latest/download/install_mauricecli.ps1 -OutFile install_mauricecli.ps1
 .\install_mauricecli.ps1
 ```
 

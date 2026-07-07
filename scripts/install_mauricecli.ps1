@@ -2,7 +2,7 @@ Param(
   [string]$Version = "",
   [string]$BinDir = "",
   [string]$Channel = $(if ($env:MAURICECLI_UPDATE_CHANNEL) { $env:MAURICECLI_UPDATE_CHANNEL } else { "stable" }),
-  [string]$Endpoint = $(if ($env:MAURICECLI_UPDATE_ENDPOINT) { $env:MAURICECLI_UPDATE_ENDPOINT } else { "https://get.agentmaurice.ai/products/mauricecli/latest.json" }),
+  [string]$Endpoint = $(if ($env:MAURICECLI_UPDATE_ENDPOINT) { $env:MAURICECLI_UPDATE_ENDPOINT } else { "https://get.agentmaurice.app/products/mauricecli/latest.json" }),
   [string]$PublicKey = $(if ($env:MAURICECLI_MINISIGN_PUBLIC_KEY) { $env:MAURICECLI_MINISIGN_PUBLIC_KEY } else { "RWT2dtVKMzMezZOuTS4bQoM1kEix9oTYEq5j5mIOYJaskfsvHC+qNBVp" })
 )
 

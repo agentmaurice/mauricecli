@@ -56,6 +56,25 @@ MauriceCLI is a powerful command-line tool for interacting with AgentMaurice fro
 Installers read the AgentMaurice update manifest, verify SHA256 and Minisign
 signatures, then install the canonical `maurice` binary.
 
+Install prerequisites first:
+
+```bash
+# Debian / Ubuntu
+sudo apt-get update && sudo apt-get install -y jq minisign
+
+# Fedora / RHEL
+sudo dnf install -y jq minisign
+
+# Alpine
+sudo apk add jq minisign
+
+# Arch
+sudo pacman -S jq minisign
+
+# macOS
+brew install jq minisign
+```
+
 **Linux / macOS**
 ```bash
 curl -fsSL https://github.com/agentmaurice/mauricecli/releases/latest/download/install_mauricecli.sh | bash

@@ -30,7 +30,13 @@ EOF
 
 need() {
   if ! command -v "$1" >/dev/null 2>&1; then
-    echo "Error: $1 is required" >&2
+    echo "Error: $1 is required." >&2
+    echo "Install prerequisites first:" >&2
+    echo "  Debian/Ubuntu: sudo apt-get update && sudo apt-get install -y jq minisign" >&2
+    echo "  Fedora/RHEL:   sudo dnf install -y jq minisign" >&2
+    echo "  Alpine:        sudo apk add jq minisign" >&2
+    echo "  Arch:          sudo pacman -S jq minisign" >&2
+    echo "  macOS:         brew install jq minisign" >&2
     exit 1
   fi
 }

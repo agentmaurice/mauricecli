@@ -1,0 +1,48 @@
+name: Instructions des agents
+
+on:
+  pull_request:
+    paths:
+      - AGENTS.md
+      - CLAUDE.md
+      - .github/workflows/agent-instructions.yml
+  push:
+    branches: [main, "codex/**"]
+    paths:
+      - AGENTS.md
+      - CLAUDE.md
+      - .github/workflows/agent-instructions.yml
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  instructions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Vérifier le bloc public et son chargement
+        shell: python
+        run: |
+          from pathlib import Path
+
+          text = Path("AGENTS.md").read_text(encoding="utf-8")
+          start = "<!-- agentmaurice:common:start -->"
+          end = "<!-- agentmaurice:common:end -->"
+          if text.count(start) != 1 or text.count(end) != 1 or text.index(start) >= text.index(end):
+              raise SystemExit("Bloc commun AGENTS.md absent ou mal délimité")
+          block = text.split(start, 1)[1].split(end, 1)[0]
+          if "### AM-Star" in block or "**File AM-Dev.**" in block:
+              raise SystemExit("Le bloc contient la section interne")
+          paragraphs = [p for p in block.split("\n\n") if p.strip().startswith("**Avant le patch.**")]
+          if len(paragraphs) != 1:
+              raise SystemExit("La consigne pré-patch doit apparaître une fois dans le bloc")
+          rule = " ".join(paragraphs[0].split())
+          for fragment in ("parcours qui applique déjà la règle", "code qui prend la décision", "autres parcours qui doivent la suivre"):
+              if fragment not in rule:
+                  raise SystemExit(f"Consigne pré-patch incomplète : {fragment}")
+          if "@AGENTS.md" not in Path("CLAUDE.md").read_text(encoding="utf-8").splitlines():
+              raise SystemExit("CLAUDE.md doit importer AGENTS.md")

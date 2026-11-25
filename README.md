@@ -882,3 +882,25 @@ Built with:
 - [Viper](https://github.com/spf13/viper) - Configuration management
 - [Bubble Tea](https://github.com/charmbracelet/bubbletea) - Terminal UI
 - [LiveKit SDK](https://livekit.io) - Real-time communication
+
+## Consignes locales pour les agents
+
+### Rôle du dépôt
+
+CLI maurice (publication GitHub, binaires sur release-binaries).
+Article de référence : `wiki/projects/mauricecli.md` dans pilote-maurice.
+
+
+
+### Sources à lire selon la tâche
+
+| Tâche | Lire d'abord (dans pilote-maurice) |
+|-------|-----------------------------------|
+| Comprendre le dépôt avant d'éditer | `wiki/INDEX.md` puis `wiki/projects/mauricecli.md` |
+| Règles d'édition, cycle Plane/Git, gates | `wiki/operations/agent-coding-guidelines.md` |
+| Tests, stabilité, release | `wiki/operations/testing.md`, `wiki/operations/stability-strategy.md`, `wiki/operations/local-release-gate.md` |
+| Interface ou parcours utilisateur | `wiki/design/interface-principles.md` (profil de la surface) |
+
+### Commandes locales et vérifications
+
+Aucun fichier de build à la racine : lire le `README.md` et le pipeline du dépôt ; ne pas inventer de commande.

@@ -5,12 +5,16 @@ on:
     paths:
       - AGENTS.md
       - CLAUDE.md
+      - README.md
+      - docs/agent-instructions.md
       - .github/workflows/agent-instructions.yml
   push:
     branches: [main, "codex/**"]
     paths:
       - AGENTS.md
       - CLAUDE.md
+      - README.md
+      - docs/agent-instructions.md
       - .github/workflows/agent-instructions.yml
   workflow_call:
 
@@ -24,25 +28,23 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Vérifier le bloc public et son chargement
+      - name: Vérifier le pointeur public et son chargement
         shell: python
         run: |
+          import os
           from pathlib import Path
 
-          text = Path("AGENTS.md").read_text(encoding="utf-8")
-          start = "<!-- agentmaurice:common:start -->"
-          end = "<!-- agentmaurice:common:end -->"
-          if text.count(start) != 1 or text.count(end) != 1 or text.index(start) >= text.index(end):
-              raise SystemExit("Bloc commun AGENTS.md absent ou mal délimité")
-          block = text.split(start, 1)[1].split(end, 1)[0]
-          if "### AM-Star" in block or "**File AM-Dev.**" in block:
-              raise SystemExit("Le bloc contient la section interne")
-          paragraphs = [p for p in block.split("\n\n") if p.strip().startswith("**Avant le patch.**")]
-          if len(paragraphs) != 1:
-              raise SystemExit("La consigne pré-patch doit apparaître une fois dans le bloc")
-          rule = " ".join(paragraphs[0].split())
-          for fragment in ("parcours qui applique déjà la règle", "code qui prend la décision", "autres parcours qui doivent la suivre"):
-              if fragment not in rule:
-                  raise SystemExit(f"Consigne pré-patch incomplète : {fragment}")
+          public_url = "https://raw.githubusercontent.com/agentmaurice/mauricecli/main/docs/agent-instructions.md"
+          pointer = Path("AGENTS.md").read_text(encoding="utf-8")
+          if public_url not in pointer or "README.md" not in pointer or not Path("README.md").is_file():
+              raise SystemExit("Point d’entrée public ou README manquant")
+          if "<!-- agentmaurice:common:" in pointer:
+              raise SystemExit("Ancien bloc recopié dans AGENTS.md")
           if "@AGENTS.md" not in Path("CLAUDE.md").read_text(encoding="utf-8").splitlines():
               raise SystemExit("CLAUDE.md doit importer AGENTS.md")
+          if os.environ["GITHUB_REPOSITORY"] == "agentmaurice/mauricecli":
+              view = Path("docs/agent-instructions.md").read_text(encoding="utf-8")
+              if view.count("**Avant le patch.**") != 1 or "code qui prend la décision" not in view:
+                  raise SystemExit("Consigne pré-patch absente de la vue publiée")
+              if "<!-- agentmaurice:" in view or "workspace/AGENTS-common.md" in view:
+                  raise SystemExit("La vue publiée contient des éléments internes")
